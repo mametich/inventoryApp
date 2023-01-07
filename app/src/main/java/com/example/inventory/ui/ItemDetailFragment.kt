@@ -22,31 +22,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.inventory.InventoryApplication
 import com.example.inventory.R
 import com.example.inventory.data.Item
-import com.example.inventory.data.ItemRepository
-import com.example.inventory.data.ItemRoomDatabase
 import com.example.inventory.data.getFormattedPrice
 import com.example.inventory.databinding.FragmentItemDetailBinding
 import com.example.inventory.viewmodel.InventoryViewModel
-import com.example.inventory.viewmodel.InventoryViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ItemDetailFragment : Fragment() {
 
     private val navigationArgs: ItemDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentItemDetailBinding
     lateinit var item: Item
 
-    private val viewModel: InventoryViewModel by activityViewModels {
-        (InventoryViewModelFactory(repository = ItemRepository(
-            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
-        ))
-    }
+    private val viewModel: InventoryViewModel by viewModels()
+//        (InventoryViewModelFactory(repository = ItemRepository(
+//            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
+//        ))
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

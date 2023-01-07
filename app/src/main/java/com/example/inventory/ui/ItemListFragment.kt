@@ -16,34 +16,34 @@
 
 package com.example.inventory.ui
 
+import dagger.hilt.android.AndroidEntryPoint
+
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.inventory.InventoryApplication
 import com.example.inventory.R
 import com.example.inventory.adapter.ItemListAdapter
-import com.example.inventory.data.ItemRepository
-import com.example.inventory.data.ItemRoomDatabase
 import com.example.inventory.databinding.ItemListFragmentBinding
 import com.example.inventory.viewmodel.InventoryViewModel
-import com.example.inventory.viewmodel.InventoryViewModelFactory
 
+
+@AndroidEntryPoint
 class ItemListFragment : Fragment() {
 
     private lateinit var binding: ItemListFragmentBinding
     private lateinit var adapter: ItemListAdapter
 
-    private val viewModel: InventoryViewModel by activityViewModels {
-        (InventoryViewModelFactory(repository = ItemRepository(
-            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
-        ))
-    }
+    private val viewModel: InventoryViewModel by viewModels()
+//        (InventoryViewModelFactory(repository = ItemRepository(
+//            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
+//        ))
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -3,10 +3,12 @@ package com.example.inventory.viewmodel
 import androidx.lifecycle.*
 import com.example.inventory.data.Item
 import com.example.inventory.data.ItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class InventoryViewModel(private val repository: ItemRepository): ViewModel() {
+@HiltViewModel
+class InventoryViewModel @Inject constructor(private val repository: ItemRepository): ViewModel() {
 
     val allItems: LiveData<List<Item>> = repository.getAllItems().asLiveData()
 
@@ -89,12 +91,11 @@ class InventoryViewModel(private val repository: ItemRepository): ViewModel() {
     }
 }
 
-class InventoryViewModelFactory(private val repository: ItemRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(InventoryViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return InventoryViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
+//class InventoryViewModelFactory(private val repository: ItemRepository) : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(InventoryViewModel::class.java)) {
+//            @Suppress("UNCHECKED_CAST")
+//            return InventoryViewModel(repository) as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }

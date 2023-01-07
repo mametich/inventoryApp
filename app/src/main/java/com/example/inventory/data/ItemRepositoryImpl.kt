@@ -1,6 +1,8 @@
 package com.example.inventory.data
 
-class ItemRepository(private val itemDao: ItemDao)  {
+import javax.inject.Inject
+
+class ItemRepository @Inject constructor(private val itemDao: ItemDao)  {
 
  fun getAllItems() = itemDao.getItems()
 
