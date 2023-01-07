@@ -1,7 +1,9 @@
 package com.example.inventory.data
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ItemRepository @Inject constructor(private val itemDao: ItemDao)  {
 
  fun getAllItems() = itemDao.getItems()

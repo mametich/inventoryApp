@@ -39,12 +39,7 @@ class ItemDetailFragment : Fragment() {
     private val navigationArgs: ItemDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentItemDetailBinding
     lateinit var item: Item
-
     private val viewModel: InventoryViewModel by viewModels()
-//        (InventoryViewModelFactory(repository = ItemRepository(
-//            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
-//        ))
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

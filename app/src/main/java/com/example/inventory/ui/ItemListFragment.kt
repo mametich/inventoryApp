@@ -16,9 +16,8 @@
 
 package com.example.inventory.ui
 
+import android.location.GnssAntennaInfo.Listener
 import dagger.hilt.android.AndroidEntryPoint
-
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +28,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.inventory.R
 import com.example.inventory.adapter.ItemListAdapter
+import com.example.inventory.adapter.Navigator
+import com.example.inventory.data.Item
 import com.example.inventory.databinding.ItemListFragmentBinding
 import com.example.inventory.viewmodel.InventoryViewModel
 
@@ -38,12 +39,7 @@ class ItemListFragment : Fragment() {
 
     private lateinit var binding: ItemListFragmentBinding
     private lateinit var adapter: ItemListAdapter
-
     private val viewModel: InventoryViewModel by viewModels()
-//        (InventoryViewModelFactory(repository = ItemRepository(
-//            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())
-//        ))
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,22 +53,31 @@ class ItemListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ItemListAdapter{
-            val action = ItemListFragmentDirections.actionItemListFragmentToItemDetailFragment(it.id)
-            findNavController().navigate(action)
-        }
-        binding.recyclerView.adapter = adapter
+        binding.floatingActionButton.setOnClickListener { addNewItem() }
+        initUI()
+
         viewModel.allItems.observe(viewLifecycleOwner){ items ->
             items.let {
                 adapter.submitList(it)
             }
         }
+    }
+
+    private fun addNewItem(){
+        val action = ItemListFragmentDirections.actionItemListFragmentToAddItemFragment(
+            getString(R.string.add_fragment_title)
+        )
+        this.findNavController().navigate(action)
+    }
+
+    private fun initUI(){
+        adapter = ItemListAdapter( object : Navigator {
+            override fun onChooseItem(item: Item) {
+                val action = ItemListFragmentDirections.actionItemListFragmentToItemDetailFragment(item.id)
+                findNavController().navigate(action)
+            }
+        })
+        binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
-        binding.floatingActionButton.setOnClickListener {
-            val action = ItemListFragmentDirections.actionItemListFragmentToAddItemFragment(
-                getString(R.string.add_fragment_title)
-            )
-            this.findNavController().navigate(action)
-        }
     }
 }

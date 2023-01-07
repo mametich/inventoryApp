@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,13 +37,7 @@ class AddItemFragment : Fragment() {
 
     private val navigationArgs: ItemDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentAddItemBinding
-
     private val viewModel: InventoryViewModel by viewModels()
-
-//    {
-//        (InventoryViewModelFactory(repository = ItemRepository(
-//            ItemRoomDatabase.getDatabase(requireContext()).getItemDao())))
-//    }
     lateinit var item: Item
 
     override fun onCreateView(
@@ -83,9 +78,11 @@ class AddItemFragment : Fragment() {
                 binding.itemPrice.text.toString(),
                 binding.itemCount.text.toString()
             )
+            val action = AddItemFragmentDirections.actionAddItemFragmentToItemListFragment()
+            findNavController().navigate(action)
+        } else {
+            Toast.makeText(requireContext(), "Please write all field", Toast.LENGTH_SHORT).show()
         }
-        val action = AddItemFragmentDirections.actionAddItemFragmentToItemListFragment()
-        findNavController().navigate(action)
     }
 
     private fun bind(item: Item){
@@ -94,6 +91,7 @@ class AddItemFragment : Fragment() {
             itemName.setText(item.itemName, TextView.BufferType.SPANNABLE)
             itemPrice.setText(price, TextView.BufferType.SPANNABLE)
             itemCount.setText(item.quantityInStock.toString(), TextView.BufferType.SPANNABLE)
+            saveAction.setOnClickListener { updateItem() }
         }
     }
 
@@ -107,6 +105,8 @@ class AddItemFragment : Fragment() {
             )
             val action = AddItemFragmentDirections.actionAddItemFragmentToItemListFragment()
             findNavController().navigate(action)
+        } else {
+            Toast.makeText(requireContext(), "Please write all field", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.inventory.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,23 +10,33 @@ import com.example.inventory.data.Item
 import com.example.inventory.data.getFormattedPrice
 import com.example.inventory.databinding.ItemListItemBinding
 
-class ItemListAdapter(private val onItemClicked:(Item)->Unit)
-    : ListAdapter<Item, ItemListAdapter.ItemViewHolder>(DiffCallBack) {
+class ItemListAdapter(private val listener: Navigator)
+    : ListAdapter<Item, ItemListAdapter.ItemViewHolder>(DiffCallBack), View.OnClickListener {
 
+    override fun onClick(v: View?) {
+        val item = v?.tag as Item
+        listener.onChooseItem(item)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-       return ItemViewHolder(ItemListItemBinding.inflate(LayoutInflater.from(parent.context)))
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemListItemBinding.inflate(inflater, parent,false)
+
+        binding.root.setOnClickListener(this)
+
+        return ItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val current = getItem(position)
-        holder.itemView.setOnClickListener {
-            onItemClicked(current)
+        val item = getItem(position)
+
+        holder.apply {
+            binding.root.tag = item
+            bind(item)
         }
-        holder.bind(current)
     }
 
-    class ItemViewHolder(private val binding: ItemListItemBinding)
+    class ItemViewHolder(val binding: ItemListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item){
             binding.apply {
